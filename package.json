@@ -2,7 +2,7 @@
   "name": "sharpsports-mobile-link",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/sgoodbets/demo#readme",
+  "homepage": "https://github.com/sgoodbets/sharpsports-mobile-link.git",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "SharpSports <auth@sharpsports.io>",
