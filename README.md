@@ -21,8 +21,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <SharpSportsMobileLink 
-      internalId='test_id'
-      token='1fb886d9aff543cb6e2d87691a8b977abf12d312'
+      internalId='id'
+      token='token'
       buttonText='Link SportsBook'
       paddingVertical={12}
       paddingHorizontal={25}
