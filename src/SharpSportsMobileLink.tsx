@@ -7,6 +7,7 @@ export interface Props {
     internalId: string;
     token: string;
     buttonText: string;
+    logoUrl: string;
     paddingVertical: number;
     paddingHorizontal: number;
     backgroundColor: string;
@@ -62,14 +63,14 @@ class SharpSportsMobileLink extends React.Component<Props> {
 }
 
 const fetchIntegration = (props: Props) => {
-    const { internalId, token } = props;
+    const { internalId, token, logoUrl } = props;
     props.onLoading?.();
     postContext('https://api.sharpsports.io/v1/context', {internalId: internalId}, token)
     .then(data => {
         props.onLoadingDismiss?.();
         props.presentWebView(
-            <WebView 
-              source={{uri: `https://ui.sharpsports.io/link/${data.cid}`}} 
+            <WebView
+              source={{uri: `https://ui.sharpsports.io/link/${data.cid}?user_logo=${logoUrl}`}}
               style={{justifyContent: "center"}}
               onNavigationStateChange={ (newNavState: WebViewNavigation) =>
                   handleWebViewNavigationStateChange(props, newNavState)
