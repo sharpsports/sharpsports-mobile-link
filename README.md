@@ -20,10 +20,11 @@ import SharpSportsMobileLink from '@sharpsports/sharpsports-mobile-link';
 export default function App() {
   return (
     <View style={styles.container}>
-      <SharpSportsMobileLink 
+      <SharpSportsMobileLink
       internalId='id'
       token='token'
       buttonText='Link SportsBook'
+      logoUrl='Your logo url here || undefined'
       paddingVertical={12}
       paddingHorizontal={25}
       backgroundColor="darkblue"
