@@ -63,7 +63,7 @@ class SharpSportsMobileLink extends React.Component<Props> {
 }
 
 const buildURL = (data: any, logoUrl: string) => {
-    return logoUrl ? `https://ui.sharpsports.io/link/${data.cid}?user_logo=${logoUrl}` : `https://ui.sharpsports.io/link/${data.cid}`
+    return logoUrl ? `https://ui.sharpsports.io/link/${data.cid}?user_logo=${logoUrl}` : `https://ui.sharpsports.io/link/${data.cid}`;
 }
 
 const fetchIntegration = (props: Props) => {
