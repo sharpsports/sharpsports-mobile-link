@@ -50,6 +50,9 @@ export default function Main() {
 stack. `onLoading` and `onLoadingDismiss` are optional, if you wish to use
 a custom loading/transition screen, but operate in a similar way.
 
+There's also an optional `onError` callback, which you can use to
+inform your users that something went wrong.
+
 App.js
 ```js
   import React from 'react';
