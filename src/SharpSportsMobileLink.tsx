@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 
 export interface Props {
@@ -20,6 +20,8 @@ export interface Props {
   onError?: () => void;
   presentWebView: (webView: JSX.Element) => void;
   dismissWebView: () => void;
+  buttonStyle: ViewStyle;
+  buttonTextStyle: TextStyle
 }
 
 class SharpSportsMobileLink extends React.Component<Props> {
@@ -32,27 +34,35 @@ class SharpSportsMobileLink extends React.Component<Props> {
       textAlign,
       buttonColor,
       fontSize,
-      fontFamily
+      fontFamily,
+      buttonStyle,
+      buttonTextStyle
     } = this.props;
 
-    const buttonStyle = {
-      backgroundColor,
-      paddingVertical,
-      paddingHorizontal,
-      borderRadius,
-      textAlign
-    }
+    const buttonStyles = [
+      {
+        backgroundColor,
+        paddingVertical,
+        paddingHorizontal,
+        borderRadius,
+        textAlign,
+      },
+      buttonStyle,
+    ]
 
-    const buttonTextStyle = {
-      color: buttonColor,
-      fontSize,
-      fontFamily
-    }
+    const buttonTextStyles = [
+      {
+        color: buttonColor,
+        fontSize,
+        fontFamily,
+      },
+      buttonTextStyle,
+    ]
 
     return (
         <TouchableOpacity onPress={() => fetchIntegration(this.props)} style={{justifyContent: "center" }}>
-          <View style={{ ...buttonStyle }}>
-            <Text style={{ ...buttonTextStyle }}>
+          <View style={buttonStyles}>
+            <Text style={buttonTextStyles}>
               { this.props.buttonText }
             </Text>
           </View>
