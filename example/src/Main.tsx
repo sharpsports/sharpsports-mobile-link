@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
-import SharpSportsMobileLink from 'sharpsports-mobile-link';
+//import SharpSportsMobileLink from 'sharpsports-mobile-link';
+import SharpSportsMobileLink from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/SharpSportsMobileLink';
 
 import { Props }  from './App';
 import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
@@ -9,6 +10,7 @@ import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
 export default function Main ({ navigation }: Props) {
 
     const _onPresentWebView = (webView: JSX.Element) => {
+        console.log("GOT HERE")
         navigation.navigate('Details', {webView});
     }
 
@@ -27,8 +29,9 @@ export default function Main ({ navigation }: Props) {
     return (
     <SafeAreaView style={styles.container}>
         <SharpSportsMobileLink 
-        internalId='test_id'
-        token='1fb886d9aff543cb6e2d87691a8b977abf12d312'
+        internalId='fd-test-1'
+        publicKey='a4e27d45042947e7967146c26973bbd4a4e27d45'
+        privateKey='433b0432d117a4c9ae338bd2e8467175d67af829'
         buttonText='Link SportsBook'
         paddingVertical={12}
         paddingHorizontal={25}
