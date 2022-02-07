@@ -25,7 +25,6 @@ export default function Main() {
       internalId='id'
       token='token'
       buttonText='Link SportsBook'
-      logoUrl='Your logo url here || undefined'
       paddingVertical={12}
       paddingHorizontal={25}
       backgroundColor="darkblue"
