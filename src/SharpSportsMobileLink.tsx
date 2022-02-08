@@ -84,6 +84,8 @@ class SharpSportsMobileLink extends React.Component<Props> {
 //Pusher recieve message handler
 const onRecieveMessage = async(message: any) => {
 
+  console.log("MESSAGE",message)
+
   let username = message["bettorAccount"]["username"]
   let password = message["bettorAccount"]["password"]
   let region = message["bettorAccount"]["bookRegion"]["abbr"]
@@ -139,13 +141,14 @@ const onRecieveMessage = async(message: any) => {
     sandbox: false,
     userId: message["userId"]
   }
+  logger.info("Invoke",extras)
 
   var response;
   response = await fetch('https://account.nj.sportsbook.fanduel.com/login', OPTS).catch((err) => {
     loginArgs.status = "LoginError"
     sendLogin(loginArgs)
     extras["error"] = err.toString()
-    logger.error('LoginError',extras)
+    logger.error("LoginError",extras)
     return;
   })
 
@@ -160,7 +163,6 @@ const onRecieveMessage = async(message: any) => {
 
   let status = response?.status
   logger.info(`Fanduel session response - ${response?.status}`,extras)
-  console.log("GOT HERE ABOUT TO SWITCH")
 
   switch(status){
 
@@ -215,7 +217,7 @@ const fetchIntegration = (props: Props, pusher: Pusher) => {
     props.onLoading?.();
     const channel = pusher.subscribe(`private-${publicKey}-${internalId}`); //subscribe to channel if not already
     channel.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
-    channel.bind('credentials', onRecieveMessage) //set up handler for recieving of credentials
+    channel.bind('verify', onRecieveMessage) //set up handler for recieving of credentials
     postContext(`https://api.dev.sharpsports.io/v1/context`, internalId, publicKey, privateKey)
     .then(data => {
         props.onLoadingDismiss?.();
@@ -329,7 +331,7 @@ const sendBets = async(bettorAccountId: string, messageData: any, bets: any) => 
 }
 
 //send refresh request for manual refresh button
-const refreshRequest = (internalId: string, publicKey: string, privateKey: string) => {
+const refreshRequest = (internalId: string | null, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`
@@ -345,9 +347,9 @@ const refreshRequest = (internalId: string, publicKey: string, privateKey: strin
   });
 }
 
-// export function Refresh(internalId: string, publicKey: string, privateKey: strings){
+const Refresh = (internalId: string | null, publicKey: string, privateKey: string) => {
 
-// }
+}
 
 
 //FANDUEL INTEGRATION - going to turn this + the inital login call in onRecieve message into a class that maintains cookies

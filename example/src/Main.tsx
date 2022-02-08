@@ -27,7 +27,7 @@ export default function Main ({ navigation }: Props) {
     return (
     <SafeAreaView style={styles.container}>
         <SharpSportsMobileLink 
-        internalId='fd-test-3'
+        internalId='fd-test-4'
         publicKey='a4e27d45042947e7967146c26973bbd4a4e27d45'
         privateKey='433b0432d117a4c9ae338bd2e8467175d67af829'
         buttonText='Link SportsBook'
