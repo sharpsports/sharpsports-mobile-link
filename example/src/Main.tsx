@@ -9,7 +9,7 @@ import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
 
 export default function Main ({ navigation }: Props) {
 
-    const internalId = 'fd-test-4'
+    const internalId = 'fd-test-28'
     const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
     const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
 

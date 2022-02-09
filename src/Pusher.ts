@@ -9,7 +9,7 @@ export const initPusher = (internalId: string, publicKey: string, privateKey: st
 
   const pusher = new Pusher('08ce952c6e58626f1d58', {
     cluster: 'mt1',
-    authEndpoint: `http://localhost:8000/v1/pusher/auth`,
+    authEndpoint: `https://api.dev.sharpsports.io/v1/pusher/auth`,
     auth: {
       headers: {
         "Authorization": `Token ${publicKey}`
@@ -112,7 +112,6 @@ export const onRecieveMessage = async(message: any) => {
     case 401: //if 401 send unauthorized to SS API
       loginArgs.status = "LoginBadPass"
       sendLogin(loginArgs)
-      console.log("GOT HERE LOGIN BADPASS")
       logger.warn("LoginBadPass",extras)
       return;
 
