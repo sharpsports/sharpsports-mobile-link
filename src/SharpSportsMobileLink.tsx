@@ -76,12 +76,12 @@ const fetchIntegration = (props: Props, pusher: Pusher) => {
     const channel = pusher.subscribe(`private-${publicKey}-${internalId}`); //subscribe to channel if not already
     channel.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
     channel.bind('verify', onRecieveMessage) //set up handler for recieving of credentials
-    postContext(`http://localhost:8000/v1/context`, internalId, publicKey, privateKey)
+    postContext(`https://api.dev.sharpsports.io/v1/context`, internalId, publicKey, privateKey)
     .then(data => {
         props.onLoadingDismiss?.();
         props.presentWebView(
             <WebView
-              source={{uri: `http://localhost:3006/link/${data.cid}`}}
+              source={{uri: `https://ui.dev.sharpsports.io/link/${data.cid}`}}
               style={{justifyContent: "center"}}
               onNavigationStateChange={ (newNavState: WebViewNavigation) =>
                   handleWebViewNavigationStateChange(props, newNavState)

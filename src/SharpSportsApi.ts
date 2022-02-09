@@ -38,7 +38,7 @@ export const sendLogin = (args: any) => {
   };
     
   //send Login requests to appropriate bettorAccount
-  fetch(`http://localhost:8000/v1/bettorAccounts/${args.bettorAccountId}/verify`, {
+  fetch(`https://api.dev.sharpsports.io/v1/bettorAccounts/${args.bettorAccountId}/verify`, {
     method: 'PUT',
     headers: HEADERS,
     body: JSON.stringify(DATA),
@@ -68,7 +68,7 @@ export const sendBets = async(bettorAccountId: string, messageData: any, bets: a
     body: JSON.stringify(PAYLOAD)
   }
 
-  fetch(`http://localhost:8000/v1/mobileBets/${bettorAccountId}`,OPTS).then((response) => {
+  fetch(`https://api.dev.sharpsports.io/v1/mobileBets/${bettorAccountId}`,OPTS).then((response) => {
     if (response.status != 200){
       logger.error(`Bad Response Sending Bets - ${response.status}`,{})
     } else {
@@ -90,7 +90,7 @@ export const refreshRequest = (internalId: string, publicKey: string, privateKey
   }
 
   const auth = hashVals(internalId,privateKey)
-  fetch(`http://localhost:8000/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS).catch((err) => {
+  fetch(`https://api.dev.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS).catch((err) => {
     logger.error(`Error sending refresh requests - ${err}`,{internalId:internalId})
   });
 }
