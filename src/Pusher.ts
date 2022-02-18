@@ -7,9 +7,9 @@ const logger = new DataDogJsonLogger
 
 export const initPusher = (internalId: string, publicKey: string, privateKey: string) => {
 
-  const pusher = new Pusher('08ce952c6e58626f1d58', {
+  const pusher = new Pusher('55c103c6264bba876169', {
     cluster: 'mt1',
-    authEndpoint: `https://api.dev.sharpsports.io/v1/pusher/auth`,
+    authEndpoint: `https://api.stg.sharpsports.io/v1/pusher/auth`,
     auth: {
       headers: {
         "Authorization": `Token ${publicKey}`
@@ -24,8 +24,6 @@ export const initPusher = (internalId: string, publicKey: string, privateKey: st
 
 //Pusher recieve message handler
 export const onRecieveMessage = async(message: any) => {
-
-  console.log("RECIEVED MESSAGE")
 
   let username = message["bettorAccount"]["username"]
   let password = message["bettorAccount"]["password"]
@@ -106,8 +104,6 @@ export const onRecieveMessage = async(message: any) => {
   logger.info(`Fanduel session response - ${response?.status}`,extras)
 
   switch(status){
-
-    //TODO - Need to find case for TOS Update
 
     case 401: //if 401 send unauthorized to SS API
       loginArgs.status = "LoginBadPass"

@@ -38,7 +38,7 @@ export const sendLogin = (args: any) => {
   };
     
   //send Login requests to appropriate bettorAccount
-  fetch(`https://api.dev.sharpsports.io/v1/bettorAccounts/${args.bettorAccountId}/verify`, {
+  fetch(`https://api.stg.sharpsports.io/v1/bettorAccounts/${args.bettorAccountId}/verify`, {
     method: 'PUT',
     headers: HEADERS,
     body: JSON.stringify(DATA),
@@ -68,7 +68,7 @@ export const sendBets = async(bettorAccountId: string, messageData: any, bets: a
     body: JSON.stringify(PAYLOAD)
   }
 
-  fetch(`https://api.dev.sharpsports.io/v1/mobileBets/${bettorAccountId}`,OPTS).then((response) => {
+  fetch(`https://api.stg.sharpsports.io/v1/mobileBets/${bettorAccountId}`,OPTS).then((response) => {
     if (response.status != 200){
       logger.error(`Bad Response Sending Bets - ${response.status}`,{})
     } else {
@@ -77,8 +77,26 @@ export const sendBets = async(bettorAccountId: string, messageData: any, bets: a
   }).catch((err) => logger.error(`Could not process bets - ${err}`,{}));
 }
 
-//send refresh request for manual refresh button
-export const refreshRequest = (internalId: string, publicKey: string, privateKey: string) => {
+//send refresh request for manual refresh button using internalId as param
+export const refreshRequestInternalId = (internalId: string, publicKey: string, privateKey: string) => {
+
+  const HEADERS = {
+    "Authorization": `Token ${publicKey}`
+  }
+
+  const OPTS = {
+    headers: HEADERS,
+    method: "POST"
+  }
+
+  console.log("Sending refresh by internalID")
+
+  const auth = hashVals(internalId,privateKey)
+  return fetch(`https://api.stg.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS)
+}
+
+//send refresh request for manual refresh button using BettorID as param
+export const refreshRequestBettorId = (internalId: string, bettorId: string, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`
@@ -90,7 +108,21 @@ export const refreshRequest = (internalId: string, publicKey: string, privateKey
   }
 
   const auth = hashVals(internalId,privateKey)
-  fetch(`https://api.dev.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS).catch((err) => {
-    logger.error(`Error sending refresh requests - ${err}`,{internalId:internalId})
-  });
+  return fetch(`https://api.stg.sharpsports.io/v1/bettors/${bettorId}/refresh?auth=${auth}`,OPTS)
+}
+
+//send refresh request for manual refresh button using bettorAccountID as param
+export const refreshRequestBettorAccountId = (internalId: string, bettorAccountId: string, publicKey: string, privateKey: string) => {
+
+  const HEADERS = {
+    "Authorization": `Token ${publicKey}`
+  }
+
+  const OPTS = {
+    headers: HEADERS,
+    method: "POST"
+  }
+
+  const auth = hashVals(internalId,privateKey)
+  return fetch(`https://api.stg.sharpsports.io/v1/bettorAccounts/${bettorAccountId}/refresh?auth=${auth}`,OPTS)
 }
