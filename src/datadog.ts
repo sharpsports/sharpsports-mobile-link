@@ -32,7 +32,7 @@ export default class DataDogJsonLogger {
 
     //set datadog specific logs
     jsonLog["ddsource"] = "native-app",
-    jsonLog["ddtags"] = "env:dev" //TODO make env variable
+    jsonLog["ddtags"] = "env:stg" //TODO make env variable
     jsonLog["service"] = "sharpsports-mobile-react-native"
 
     return jsonLog
@@ -44,10 +44,10 @@ export default class DataDogJsonLogger {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        "DD-API-KEY": "cd8ddcfd0b4c5189058e9bd9ebd77a02"
+        "DD-API-KEY": "54baed1f96dd31e6cc7db952f0ab15a1"
       },
       body: JSON.stringify(jsonLog)
-    }).catch((err: any) => console.error(err))
+    }).catch((err: any) => console.error("DATADOG ERROR",err))
   }
 }
 

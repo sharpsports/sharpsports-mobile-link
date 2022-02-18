@@ -1,13 +1,6 @@
 
 import * as React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { WebView, WebViewNavigation } from 'react-native-webview';
-import Pusher from 'pusher-js/react-native'
-import DataDogJsonLogger from './datadog';
-import {initPusher, onRecieveMessage} from "./Pusher"
-import { postContext } from './SharpSportsApi';
-
-const logger = new DataDogJsonLogger
 
 export interface Props {
     internalId: string;
@@ -22,11 +15,7 @@ export interface Props {
     fontFamily: string;
     fontSize: number;
     textAlign: 'center' | 'left' | 'right | justify'
-    onLoading?: () => void;
-    onLoadingDismiss?: () => void;
-    onError?: () => void;
-    presentWebView: (webView: JSX.Element) => void;
-    dismissWebView: () => void;
+    fetchIntegration: () => void;
 }
 
 class SharpSportsMobileLink extends React.Component<Props> {
@@ -56,11 +45,9 @@ class SharpSportsMobileLink extends React.Component<Props> {
             fontSize,
             fontFamily
         }
-        
-        const pusher = initPusher(this.props.internalId, this.props.publicKey, this.props.privateKey)
 
         return (
-            <TouchableOpacity onPress={() => fetchIntegration(this.props,pusher)} style={{justifyContent: "center" }}>
+            <TouchableOpacity onPress={() => this.props.fetchIntegration()} style={{justifyContent: "center" }}>
                 <View style={{ ...buttonStyle }}>
                     <Text style={{ ...buttonTextStyle }}>
                         { this.props.buttonText }
@@ -70,44 +57,6 @@ class SharpSportsMobileLink extends React.Component<Props> {
         )
     }
 }
-
-//After click sharpsports button: set up pusher subscription and present webview
-const fetchIntegration = (props: Props, pusher: Pusher) => {
-    const { internalId, publicKey, privateKey} = props;
-    props.onLoading?.();
-    const channel = pusher.subscribe(`private-${publicKey}-${internalId}`); //subscribe to channel if not already
-    channel.unbind();  // unbind all channel events to ensure no duplicate message handling
-    channel.bind('verify', onRecieveMessage) //set up handler for recieving of credentials bookLink UI
-    channel.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials through account management wigit
-    postContext(`https://api.stg.sharpsports.io/v1/context`, internalId, publicKey, privateKey)
-    .then(data => {
-        console.log("FETCHED INTEGRATION")
-        //const webView = PusherWebView(props,data.cid)
-        props.onLoadingDismiss?.();
-        props.presentWebView(
-            <WebView
-                source={{uri: `https://ui.stg.sharpsports.io/link/${data.cid}`}}
-                style={{justifyContent: "center"}}
-                onNavigationStateChange={ (newNavState: WebViewNavigation) =>
-                    handleWebViewNavigationStateChange(props, newNavState, channel)
-                }
-            />
-        )
-    })
-    .catch(error => {
-        logger.error(`Error occurred posting context: ${error}`,{internalId:internalId})
-        props.onError?.()
-    })
-}
-
-//dismiss webview when done in url
-const handleWebViewNavigationStateChange = (props: Props, newNavState: WebViewNavigation) => {
-    const { url } = newNavState;
-    if (url.includes('/done')) {
-        props.dismissWebView();
-    }
-}
-
 
 export default SharpSportsMobileLink;
 
