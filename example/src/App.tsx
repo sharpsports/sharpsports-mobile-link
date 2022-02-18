@@ -2,11 +2,11 @@ import React from 'react';
 import { LogBox } from 'react-native';
 import { NavigationContainer, NavigationContainerRef, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/SharpSports';
 
 import Main from './Main';
 import Details from './Details';
 import LoadingScreen from './LoadingScreen';
-
 
 type RootStackParamList = {
   Main: undefined;
@@ -36,6 +36,7 @@ export type Props = {
 };
 
 const StackNavigator = createStackNavigator<RootStackParamList>();
+
 
 const MainStack = () => {
   return (

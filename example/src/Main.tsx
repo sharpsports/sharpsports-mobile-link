@@ -1,17 +1,18 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Button } from 'react-native';
 //import SharpSportsMobileLink from 'sharpsports-mobile-link';
-import SharpSportsMobileLink from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/SharpSportsMobileLink';
-import { Refresh } from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/Refresh';
+//import SharpSportsMobileLink from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/SharpSportsMobileLink';
 
 import { Props }  from './App';
 import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
+import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/SharpSports';
+
+const internalId = 'fd-refresh-tn'
+const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
+const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
+const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)
 
 export default function Main ({ navigation }: Props) {
-
-    const internalId = 'fd-refresh-tn'
-    const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
-    const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
 
     const _onPresentWebView = (webView: JSX.Element) => {
         navigation.navigate('Details', {webView});
@@ -30,51 +31,35 @@ export default function Main ({ navigation }: Props) {
     }
 
     const onClickInternal = () => {
-        Refresh({
-            internalId: internalId, 
-            publicKey: SSpublicKey,
-            privateKey: SSprivateKey
-        })
+        sharpsports.Refresh({})
     }
 
     const onClickBettor = () => {
-        Refresh({
-            internalId: internalId,
-            bettorId: 'BTTR_af0e025bc6164185bc7e0a3beee0f9cb',  
-            publicKey: SSpublicKey,
-            privateKey: SSprivateKey
-        })
+        sharpsports.Refresh({bettorId: 'BTTR_ec4f0aec303a4984a297b412a6929088'})
     }
 
     const onClickBettorAccount = () => {
-        Refresh({
-            internalId: internalId,
-            bettorAccountId: 'BACT_32f4806700e34decb5e91a091dd0fe92',  
-            publicKey: SSpublicKey,
-            privateKey: SSprivateKey
-        })
+        sharpsports.Refresh({bettorAccountId: 'BACT_5063a4b8d86940cb8a29be05f2781202'})
     }
 
     return (
+
     <SafeAreaView style={styles.container}>
-        <SharpSportsMobileLink 
-        internalId={internalId}
-        publicKey={SSpublicKey}
-        privateKey={SSprivateKey}
-        buttonText='Link SportsBook'
-        paddingVertical={12}
-        paddingHorizontal={25}
-        backgroundColor="darkblue"
-        buttonColor='#2ce384'
-        borderRadius={8}
-        fontFamily='Helvetica'
-        fontSize={20}
-        textAlign='center'
-        presentWebView={_onPresentWebView}
-        dismissWebView={_onDismissWebView}
-        onLoading={_onLoading}
-        onLoadingDismiss={_onLoadingDismiss}
-        />
+        {sharpsports.LinkButton({
+            buttonText: 'Link SportsBook',
+            paddingVertical: 12,
+            paddingHorizontal: 25,
+            backgroundColor: "darkblue",
+            buttonColor: '#2ce384',
+            borderRadius: 8,
+            fontFamily: 'Helvetica',
+            fontSize: 20,
+            textAlign: 'center',
+            presentWebView: _onPresentWebView,
+            dismissWebView: _onDismissWebView,
+            onLoading: _onLoading,
+            onLoadingDismiss: _onLoadingDismiss
+        })}
         <Button
             onPress={() => onClickInternal()}
             title="Refresh Bettor by InternalID"

@@ -96,7 +96,7 @@ export const refreshRequestInternalId = (internalId: string, publicKey: string, 
 }
 
 //send refresh request for manual refresh button using BettorID as param
-export const refreshRequestBettorId = (internalId: string, bettorId: string, publicKey: string, privateKey: string) => {
+export const refreshRequestBettorId = (bettorId: string, internalId: string, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`
@@ -112,7 +112,7 @@ export const refreshRequestBettorId = (internalId: string, bettorId: string, pub
 }
 
 //send refresh request for manual refresh button using bettorAccountID as param
-export const refreshRequestBettorAccountId = (internalId: string, bettorAccountId: string, publicKey: string, privateKey: string) => {
+export const refreshRequestBettorAccountId = (bettorAccountId: string, internalId: string, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`

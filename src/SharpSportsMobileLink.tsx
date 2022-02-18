@@ -6,6 +6,7 @@ import Pusher from 'pusher-js/react-native'
 import DataDogJsonLogger from './datadog';
 import {initPusher, onRecieveMessage} from "./Pusher"
 import { postContext } from './SharpSportsApi';
+
 const logger = new DataDogJsonLogger
 
 export interface Props {
@@ -29,6 +30,7 @@ export interface Props {
 }
 
 class SharpSportsMobileLink extends React.Component<Props> {
+    
     render() {
         const {
             backgroundColor,
@@ -54,7 +56,7 @@ class SharpSportsMobileLink extends React.Component<Props> {
             fontSize,
             fontFamily
         }
-
+        
         const pusher = initPusher(this.props.internalId, this.props.publicKey, this.props.privateKey)
 
         return (
@@ -73,19 +75,22 @@ class SharpSportsMobileLink extends React.Component<Props> {
 const fetchIntegration = (props: Props, pusher: Pusher) => {
     const { internalId, publicKey, privateKey} = props;
     props.onLoading?.();
-    const channel = pusher.subscribe(`private-encrypted-${publicKey}-${internalId}`); //subscribe to channel if not already
-    channel.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
-    channel.bind('verify', onRecieveMessage) //set up handler for recieving of credentials
+    const channel = pusher.subscribe(`private-${publicKey}-${internalId}`); //subscribe to channel if not already
+    channel.unbind();  // unbind all channel events to ensure no duplicate message handling
+    channel.bind('verify', onRecieveMessage) //set up handler for recieving of credentials bookLink UI
+    channel.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials through account management wigit
     postContext(`https://api.stg.sharpsports.io/v1/context`, internalId, publicKey, privateKey)
     .then(data => {
+        console.log("FETCHED INTEGRATION")
+        //const webView = PusherWebView(props,data.cid)
         props.onLoadingDismiss?.();
         props.presentWebView(
             <WebView
-              source={{uri: `https://ui.stg.sharpsports.io/link/${data.cid}`}}
-              style={{justifyContent: "center"}}
-              onNavigationStateChange={ (newNavState: WebViewNavigation) =>
-                  handleWebViewNavigationStateChange(props, newNavState)
-              }
+                source={{uri: `https://ui.stg.sharpsports.io/link/${data.cid}`}}
+                style={{justifyContent: "center"}}
+                onNavigationStateChange={ (newNavState: WebViewNavigation) =>
+                    handleWebViewNavigationStateChange(props, newNavState, channel)
+                }
             />
         )
     })
@@ -97,10 +102,10 @@ const fetchIntegration = (props: Props, pusher: Pusher) => {
 
 //dismiss webview when done in url
 const handleWebViewNavigationStateChange = (props: Props, newNavState: WebViewNavigation) => {
-  const { url } = newNavState;
-  if (url.includes('/done')) {
-      props.dismissWebView();
-  }
+    const { url } = newNavState;
+    if (url.includes('/done')) {
+        props.dismissWebView();
+    }
 }
 
 

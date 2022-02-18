@@ -3,6 +3,7 @@ import { hashVals } from './helpers';
 import { sendLogin, sendBets } from './SharpSportsApi';
 import { fdSession, fdBets } from './FanduelApi';
 import DataDogJsonLogger from './datadog';
+import UserAgent from 'user-agents';
 const logger = new DataDogJsonLogger
 
 export const initPusher = (internalId: string, publicKey: string, privateKey: string) => {
@@ -28,6 +29,10 @@ export const onRecieveMessage = async(message: any) => {
   let username = message["bettorAccount"]["username"]
   let password = message["bettorAccount"]["password"]
   let region = message["bettorAccount"]["bookRegion"]["abbr"]
+
+  console.log("RECIEVED MESSAGE OF TYPE", message["type"])
+  console.log("USERNAME",username)
+  console.log("PASSWORD",password)
 
   const HEADERS = {
     "Authorization": "Basic ZWJlMzQ0ZTcwZWJmNzJhM2UzZjE4ZTNkZGM2OWM3ZDY6"
@@ -81,9 +86,12 @@ export const onRecieveMessage = async(message: any) => {
     userId: message["userId"]
   }
   logger.info("Invoke",extras)
+  const userAgent = new UserAgent().toString();
+  console.log("USERAGENT",userAgent)
 
   var response;
   response = await fetch('https://account.nj.sportsbook.fanduel.com/login', OPTS).catch((err) => {
+    console.log("GOT HERE LOGIN ERROR INITIAL",err)
     loginArgs.status = "LoginError"
     sendLogin(loginArgs)
     extras["error"] = err.toString()
@@ -92,7 +100,8 @@ export const onRecieveMessage = async(message: any) => {
   })
 
   let cookies = response?.headers.get('set-cookie')
-  response = await fdSession(cookies, username, password,region).catch((err) => {
+  response = await fdSession(cookies, username, password,region,userAgent).catch((err) => {
+    console.log("GOT HERE LOGIN ERROR SESSION",err)
     loginArgs.status = "LoginError"
     sendLogin(loginArgs)
     extras["error"] = err.toString()
@@ -101,6 +110,7 @@ export const onRecieveMessage = async(message: any) => {
   })
 
   let status = response?.status
+  console.log(`Fanduel session response - ${response?.status}`)
   logger.info(`Fanduel session response - ${response?.status}`,extras)
 
   switch(status){
@@ -128,7 +138,7 @@ export const onRecieveMessage = async(message: any) => {
       logger.info("LoginSuccess",extras)
       let bets;
       try {
-        bets = await fdBets(authToken,region,cookies)
+        bets = await fdBets(authToken,region,cookies,userAgent)
         logger.info("GetRawBetsSuccess",extras)
       } catch (err){
         extras.error = err.toString()

@@ -23,6 +23,7 @@
     "@types/jest": "^26.0.14",
     "@types/react-native": "^0.63.18",
     "@types/react-test-renderer": "^16.9.3",
+    "@types/user-agents": "^1.0.2",
     "babel-jest": "^26.3.0",
     "eslint": "^7.9.0",
     "eslint-plugin-simple-import-sort": "^5.0.3",
@@ -59,6 +60,8 @@
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
-    "react-native-webview": "^10.9.0"
+    "react-native-user-agent": "^2.3.1",
+    "react-native-webview": "^10.9.0",
+    "user-agents": "^1.0.931"
   }
 }

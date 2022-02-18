@@ -1,10 +1,9 @@
 //starts authenticated session
-export const fdSession = async(cookie: string | null | undefined, username: string, password: string, region: string) => {
+export const fdSession = async(cookie: string | null | undefined, username: string, password: string, region: string, userAgent: string) => {
 
   const HEADERS = {
     "Authorization": "Basic ZWJlMzQ0ZTcwZWJmNzJhM2UzZjE4ZTNkZGM2OWM3ZDY6",
-    //Need user agent for testing, reqeust blocked from mobile simulator
-    //"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+    "User-Agent": userAgent,
     "Referer": "https://account.nj.sportsbook.fanduel.com",
     "Content-Type": "application/json",
     "Cookie": cookie
@@ -27,13 +26,12 @@ export const fdSession = async(cookie: string | null | undefined, username: stri
 }
 
 //gets bets of a certain type
-const fdBetsType = async(authToken: string, settled: boolean,region: string, cookies: string | null | undefined) => {
+const fdBetsType = async(authToken: string, settled: boolean,region: string, cookies: string | null | undefined, userAgent: string) => {
 
   const HEADERS = {
     Accept: "application/json",
     Referer: `https://${region}.sportsbook.fanduel.com/`,
-    //Need user agent for testing, reqeust blocked from mobile simulator
-    //"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+    "User-Agent": userAgent,
     'X-Authentication': authToken,
     cookie: cookies
   };
@@ -70,9 +68,9 @@ const fdBetsType = async(authToken: string, settled: boolean,region: string, coo
 }
 
 //gets all bets up to 1000 max
-export const fdBets = async(authToken: string, region: string, cookies: string | null | undefined) => {
-  const SETTLED_BETS = await fdBetsType(authToken, true, region, cookies);
-  const OPEN_BETS = await fdBetsType(authToken, false, region,cookies);
+export const fdBets = async(authToken: string, region: string, cookies: string | null | undefined, userAgent: string) => {
+  const SETTLED_BETS = await fdBetsType(authToken, true, region, cookies,userAgent);
+  const OPEN_BETS = await fdBetsType(authToken, false, region,cookies,userAgent);
   console.log("NUMBER OF SETTLED BETS", SETTLED_BETS.length)
   console.log("NUMBER OF OPEN BETS", OPEN_BETS.length)
   return OPEN_BETS.concat(SETTLED_BETS);
