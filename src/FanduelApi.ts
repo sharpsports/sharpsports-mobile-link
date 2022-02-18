@@ -4,7 +4,7 @@ export const fdSession = async(cookie: string | null | undefined, username: stri
   const HEADERS = {
     "Authorization": "Basic ZWJlMzQ0ZTcwZWJmNzJhM2UzZjE4ZTNkZGM2OWM3ZDY6",
     //Need user agent for testing, reqeust blocked from mobile simulator
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+    //"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
     "Referer": "https://account.nj.sportsbook.fanduel.com",
     "Content-Type": "application/json",
     "Cookie": cookie
@@ -33,7 +33,7 @@ const fdBetsType = async(authToken: string, settled: boolean,region: string, coo
     Accept: "application/json",
     Referer: `https://${region}.sportsbook.fanduel.com/`,
     //Need user agent for testing, reqeust blocked from mobile simulator
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+    //"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
     'X-Authentication': authToken,
     cookie: cookies
   };

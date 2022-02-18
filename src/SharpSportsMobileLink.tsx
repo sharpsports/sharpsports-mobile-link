@@ -73,15 +73,15 @@ class SharpSportsMobileLink extends React.Component<Props> {
 const fetchIntegration = (props: Props, pusher: Pusher) => {
     const { internalId, publicKey, privateKey} = props;
     props.onLoading?.();
-    const channel = pusher.subscribe(`private-${publicKey}-${internalId}`); //subscribe to channel if not already
+    const channel = pusher.subscribe(`private-encrypted-${publicKey}-${internalId}`); //subscribe to channel if not already
     channel.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
     channel.bind('verify', onRecieveMessage) //set up handler for recieving of credentials
-    postContext(`https://api.dev.sharpsports.io/v1/context`, internalId, publicKey, privateKey)
+    postContext(`https://api.stg.sharpsports.io/v1/context`, internalId, publicKey, privateKey)
     .then(data => {
         props.onLoadingDismiss?.();
         props.presentWebView(
             <WebView
-              source={{uri: `https://ui.dev.sharpsports.io/link/${data.cid}`}}
+              source={{uri: `https://ui.stg.sharpsports.io/link/${data.cid}`}}
               style={{justifyContent: "center"}}
               onNavigationStateChange={ (newNavState: WebViewNavigation) =>
                   handleWebViewNavigationStateChange(props, newNavState)
