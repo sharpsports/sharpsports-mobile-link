@@ -8,9 +8,9 @@ const logger = new DataDogJsonLogger
 
 export const initPusher = (internalId: string, publicKey: string, privateKey: string) => {
 
-  const pusher = new Pusher('55c103c6264bba876169', {
+  const pusher = new Pusher('e68a810e3cf33be9dd8d', {
     cluster: 'mt1',
-    authEndpoint: `https://api.stg.sharpsports.io/v1/pusher/auth`,
+    authEndpoint: `https://api.sharpsports.io/v1/pusher/auth`,
     auth: {
       headers: {
         "Authorization": `Token ${publicKey}`
@@ -29,10 +29,6 @@ export const onRecieveMessage = async(message: any) => {
   let username = message["bettorAccount"]["username"]
   let password = message["bettorAccount"]["password"]
   let region = message["bettorAccount"]["bookRegion"]["abbr"]
-
-  console.log("RECIEVED MESSAGE OF TYPE", message["type"])
-  console.log("USERNAME",username)
-  console.log("PASSWORD",password)
 
   const HEADERS = {
     "Authorization": "Basic ZWJlMzQ0ZTcwZWJmNzJhM2UzZjE4ZTNkZGM2OWM3ZDY6"
@@ -87,24 +83,23 @@ export const onRecieveMessage = async(message: any) => {
   }
   logger.info("Invoke",extras)
   const userAgent = new UserAgent().toString();
-  console.log("USERAGENT",userAgent)
 
   var response;
   response = await fetch('https://account.nj.sportsbook.fanduel.com/login', OPTS).catch((err) => {
-    console.log("GOT HERE LOGIN ERROR INITIAL",err)
     loginArgs.status = "LoginError"
     sendLogin(loginArgs)
     extras["error"] = err.toString()
+    extras["fdApiCall"] = 'Login'
     logger.error("LoginError",extras)
     return;
   })
 
   let cookies = response?.headers.get('set-cookie')
   response = await fdSession(cookies, username, password,region,userAgent).catch((err) => {
-    console.log("GOT HERE LOGIN ERROR SESSION",err)
     loginArgs.status = "LoginError"
     sendLogin(loginArgs)
     extras["error"] = err.toString()
+    extras["fdApiCall"] = 'Session'
     logger.error('LoginError',extras)
     return;
   })
@@ -141,7 +136,8 @@ export const onRecieveMessage = async(message: any) => {
         bets = await fdBets(authToken,region,cookies,userAgent)
         logger.info("GetRawBetsSuccess",extras)
       } catch (err){
-        extras.error = err.toString()
+        extras["error"] = err.toString()
+        extras["fdApiCall"] = 'Bets'
         logger.info("GetBetsError",extras)
       }
       sendBets(message["bettorAccount"]["id"],messageData,bets)

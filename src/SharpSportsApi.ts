@@ -38,7 +38,7 @@ export const sendLogin = (args: any) => {
   };
     
   //send Login requests to appropriate bettorAccount
-  fetch(`https://api.stg.sharpsports.io/v1/bettorAccounts/${args.bettorAccountId}/verify`, {
+  fetch(`https://api.sharpsports.io/v1/bettorAccounts/${args.bettorAccountId}/verify`, {
     method: 'PUT',
     headers: HEADERS,
     body: JSON.stringify(DATA),
@@ -68,7 +68,7 @@ export const sendBets = async(bettorAccountId: string, messageData: any, bets: a
     body: JSON.stringify(PAYLOAD)
   }
 
-  fetch(`https://api.stg.sharpsports.io/v1/mobileBets/${bettorAccountId}`,OPTS).then((response) => {
+  fetch(`https://api.sharpsports.io/v1/mobileBets/${bettorAccountId}`,OPTS).then((response) => {
     if (response.status != 200){
       logger.error(`Bad Response Sending Bets - ${response.status}`,{})
     } else {
@@ -89,10 +89,8 @@ export const refreshRequestInternalId = (internalId: string, publicKey: string, 
     method: "POST"
   }
 
-  console.log("Sending refresh by internalID")
-
   const auth = hashVals(internalId,privateKey)
-  return fetch(`https://api.stg.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS)
+  return fetch(`https://api.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS)
 }
 
 //send refresh request for manual refresh button using BettorID as param
@@ -108,7 +106,7 @@ export const refreshRequestBettorId = (bettorId: string, internalId: string, pub
   }
 
   const auth = hashVals(internalId,privateKey)
-  return fetch(`https://api.stg.sharpsports.io/v1/bettors/${bettorId}/refresh?auth=${auth}`,OPTS)
+  return fetch(`https://api.sharpsports.io/v1/bettors/${bettorId}/refresh?auth=${auth}`,OPTS)
 }
 
 //send refresh request for manual refresh button using bettorAccountID as param
@@ -124,5 +122,5 @@ export const refreshRequestBettorAccountId = (bettorAccountId: string, internalI
   }
 
   const auth = hashVals(internalId,privateKey)
-  return fetch(`https://api.stg.sharpsports.io/v1/bettorAccounts/${bettorAccountId}/refresh?auth=${auth}`,OPTS)
+  return fetch(`https://api.sharpsports.io/v1/bettorAccounts/${bettorAccountId}/refresh?auth=${auth}`,OPTS)
 }

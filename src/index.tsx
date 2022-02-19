@@ -1,5 +1,4 @@
 
-import SharpSportsMobileLink from './SharpSportsMobileLink';
-import Refresh from './Refresh'
+import SharpSports from './SharpSports';
 
-export default {SharpSportsMobileLink, Refresh};
+export default SharpSports;

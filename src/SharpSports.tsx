@@ -60,14 +60,14 @@ class SharpSports {
       channel?.unbind();  // unbind all channel events to ensure no duplicate message handling
       channel?.bind('verify', onRecieveMessage) //set up handler for recieving of credentials bookLink UI
       channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials through account management wigit
-      postContext(`https://api.stg.sharpsports.io/v1/context`, this.internalId, this.publicKey, this.privateKey)
+      postContext(`https://api.sharpsports.io/v1/context`, this.internalId, this.publicKey, this.privateKey)
       .then(data => {
           console.log("FETCHED INTEGRATION")
           //const webView = PusherWebView(props,data.cid)
           args.onLoadingDismiss?.();
           args.presentWebView(
               <WebView
-                  source={{uri: `https://ui.stg.sharpsports.io/link/${data.cid}`}}
+                  source={{uri: `https://ui.sharpsports.io/link/${data.cid}`}}
                   style={{justifyContent: "center"}}
                   onNavigationStateChange={ (newNavState: WebViewNavigation) =>
                       handleWebViewNavigationStateChange(args.dismissWebView,newNavState)
