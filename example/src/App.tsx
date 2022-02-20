@@ -7,8 +7,7 @@ import Main from './Main';
 import Details from './Details';
 import LoadingScreen from './LoadingScreen';
 
-//import SharpSports from '@sharpsports/sharpsports-mobile-link';
-import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src';
+import SharpSports from '@sharpsports/sharpsports-mobile-link';
 
 const internalId = 'fd-refresh-tn'
 const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'

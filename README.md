@@ -22,7 +22,7 @@ $ npm i @sharpsports/sharpsports-mobile-link --save
 
  Import the SharpSports package into your app and initialize. <strong> Note: it is important to only initialize SharpSports once in your application. </strong> 
 
-```≈
+```js
 import SharpSports from '@sharpsports/sharpsports-mobile-link';
 
 const internalId = 'my-internal-id'
@@ -53,7 +53,7 @@ textAlign: 'center' | 'left' | 'right | justify'
 ```
 
 ### Navigation Callback Arguments
-There are several callback functions that can/must be inputted as arguments to `Link Button`. `presentWebView` and `dismissWebView` are required and must be linked to your navigation
+There are several callback functions that can/must be provided as arguments to `Link Button`. `presentWebView` and `dismissWebView` are required and must be linked to your navigation
 stack. `onLoading` and `onLoadingDismiss` are optional, if you wish to use
 a custom loading/transition screen. There's also an optional `onError` callback, which you can use to inform your users that something went wrong.
 ```
@@ -69,7 +69,7 @@ onError?: () =>  void;
  The `Refresh` method allow you to make refresh requests to the SharpSports API. 
 
 ### Arguments
-By default the `Refresh` method will run a refresh all accounts associated with the `internalId` that you provided when initializing the `SharpSports` objects. Optionally you can pass a `bettorId` to refresh all accounts associated with that ID or a `bettorAccountId` to refresh just a specific account.
+By default the `Refresh` method will run a refresh on all accounts associated with the `internalId` that you provided when initializing the `SharpSports` object. Optionally you can pass a `bettorId` to refresh all accounts associated with that ID or a `bettorAccountId` to refresh just a specific account.
 ```
 bettorId?: string;
 bettorAccountId?: number;
@@ -118,10 +118,10 @@ import  Main  from  './Main'; // The page containing the SharpSportsMobileLink
 import  Details  from  './Details'; // A page accepting an arbitrary WebView
 
 //init sharpsports
-const  internalId = 'fd-refresh-tn'
-const  SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
-const  SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
-export const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)
+const internalId = 'my-internal-id'
+const publicKey = 'my-public-key-string'
+const privateKey = 'my-private-key-string'
+export const sharpsports = new SharpSports(internalId,publicKey,privateKey)
 
 type  RootStackParamList = {
 	Main: undefined;
@@ -139,8 +139,8 @@ type  DetailsScreenRouteProp = RouteProp<
 >;
 
 export  type  Props = {
-navigation: MainScreenNavigationProp;
-route: DetailsScreenRouteProp;
+  navigation: MainScreenNavigationProp;
+  route: DetailsScreenRouteProp;
 };
 
 const  StackNavigator = createStackNavigator<RootStackParamList>();
