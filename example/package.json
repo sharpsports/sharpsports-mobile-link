@@ -11,9 +11,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-community/netinfo": "^7.1.8",
+    "@react-native-community/netinfo": "^8.0.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
+    "@sharpsports/sharpsports-mobile-link": "^2.0.1",
+    "md5": "^2.3.0",
     "pusher-js": "^7.0.4",
     "react": "^16.13.1",
     "react-native": "^0.63.2",

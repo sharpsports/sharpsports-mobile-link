@@ -47,7 +47,7 @@ export default class DataDogJsonLogger {
         "DD-API-KEY": "54baed1f96dd31e6cc7db952f0ab15a1"
       },
       body: JSON.stringify(jsonLog)
-    }).catch((err: any) => console.error("DATADOG ERROR",err))
+    })
   }
 }
 

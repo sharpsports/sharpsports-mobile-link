@@ -20,6 +20,9 @@ export const initPusher = (internalId: string, publicKey: string, privateKey: st
       }
     }
   });
+
+  logger.info("Pusher Initialized",{internalId:internalId})
+
   return pusher
 }
 
@@ -94,7 +97,7 @@ export const onRecieveMessage = async(message: any) => {
     return;
   })
 
-  let cookies = response?.headers.get('set-cookie')
+  var cookies = response?.headers.get('set-cookie') || ''
   response = await fdSession(cookies, username, password,region,userAgent).catch((err) => {
     loginArgs.status = "LoginError"
     sendLogin(loginArgs)
@@ -117,10 +120,10 @@ export const onRecieveMessage = async(message: any) => {
       return;
 
     case 201:
-      var data;
+      var data = {} as any;
       try {
-        data = await response.json()
-      } catch (err) {
+        data = await response?.json();
+      } catch (err: any) {
         extras["error"] = err.toString()
         logger.error('LoginError',extras)    
       }
@@ -135,7 +138,7 @@ export const onRecieveMessage = async(message: any) => {
       try {
         bets = await fdBets(authToken,region,cookies,userAgent)
         logger.info("GetRawBetsSuccess",extras)
-      } catch (err){
+      } catch (err: any){
         extras["error"] = err.toString()
         extras["fdApiCall"] = 'Bets'
         logger.info("GetBetsError",extras)

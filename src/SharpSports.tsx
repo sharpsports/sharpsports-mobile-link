@@ -7,7 +7,6 @@ import DataDogJsonLogger from './datadog';
 import SharpSportsMobileLink from './SharpSportsMobileLink'
 const logger = new DataDogJsonLogger
 
-
 export interface RefreshArgs {
   bettorId?: string,
   bettorAccountId?: string
@@ -27,6 +26,7 @@ export interface ButtonArgs {
   onLoadingDismiss?: () => void;
   presentWebView: (webView: JSX.Element) => void;
   dismissWebView: () => void;
+  onError?: () => void;
 }
 
 class SharpSports {
@@ -37,6 +37,7 @@ class SharpSports {
   isPusherInit: boolean;
  
   constructor(internalId: string, publicKey: string, privateKey: string) {
+
     this.internalId = internalId;
     this.publicKey = publicKey;
     this.privateKey = privateKey;
@@ -77,6 +78,7 @@ class SharpSports {
       })
       .catch(error => {
           logger.error(`Error occurred posting context: ${error}`,{internalId:this.internalId})
+          args.onError?.()
       })
     }
 
@@ -107,7 +109,7 @@ class SharpSports {
     )
   }
  
-  Refresh(args: RefreshArgs) {
+  Refresh(args?: RefreshArgs) {
 
     //only init pusher if it hasn't alrady been initialized
     if (!this.isPusherInit){
@@ -119,11 +121,11 @@ class SharpSports {
     channel?.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
     channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials
 
-    if (args.bettorId && args.bettorAccountId){
+    if (args?.bettorId && args?.bettorAccountId){
       throw 'You cannot input both a bettorId and a bettorAccountId'
-    } else if (args.bettorId){
+    } else if (args?.bettorId){
       return refreshRequestBettorId(args.bettorId, this.internalId, this.publicKey, this.privateKey)
-    } else if (args.bettorAccountId){
+    } else if (args?.bettorAccountId){
       return refreshRequestBettorAccountId(args.bettorAccountId, this.internalId, this.publicKey, this.privateKey)
     } else {
       return refreshRequestInternalId(this.internalId, this.publicKey, this.privateKey)

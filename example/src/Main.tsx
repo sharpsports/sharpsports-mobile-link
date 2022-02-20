@@ -1,13 +1,7 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, Button } from 'react-native';
-import SharpSports from 'sharpsports-mobile-link';
-import { Props }  from './App';
+import { StyleSheet, SafeAreaView, Button, Alert } from 'react-native';
+import { Props, sharpsports }  from './App';
 import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
-
-const internalId = 'fd-refresh-tn'
-const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
-const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
-const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)
 
 export default function Main ({ navigation }: Props) {
 
@@ -27,15 +21,19 @@ export default function Main ({ navigation }: Props) {
         closeLoadingScreen();
     }
 
-    const onClickInternal = () => {
-        sharpsports.Refresh({})
+    const _onError = () => {
+        Alert.alert("SharpSports Error", "Could not load SharpSports BookLink")
     }
 
-    const onClickBettor = () => {
+    const refreshbyInternalId = () => {
+        sharpsports.Refresh()
+    }
+
+    const refreshbyBettorId = () => {
         sharpsports.Refresh({bettorId: 'BTTR_ec4f0aec303a4984a297b412a6929088'})
     }
 
-    const onClickBettorAccount = () => {
+    const refreshbyBettorAccountId = () => {
         sharpsports.Refresh({bettorAccountId: 'BACT_5063a4b8d86940cb8a29be05f2781202'})
     }
 
@@ -55,22 +53,23 @@ export default function Main ({ navigation }: Props) {
             presentWebView: _onPresentWebView,
             dismissWebView: _onDismissWebView,
             onLoading: _onLoading,
-            onLoadingDismiss: _onLoadingDismiss
+            onLoadingDismiss: _onLoadingDismiss,
+            onError: _onError
         })}
         <Button
-            onPress={() => onClickInternal()}
+            onPress={() => refreshbyInternalId()}
             title="Refresh Bettor by InternalID"
             color="#841584"
             accessibilityLabel="Learn more about this purple button"
         />
         <Button
-            onPress={() => onClickBettor()}
+            onPress={() => refreshbyBettorId()}
             title="Refresh Bettor by BettorID"
             color="#841584"
             accessibilityLabel="Learn more about this purple button"
         />
         <Button
-            onPress={() => onClickBettorAccount()}
+            onPress={() => refreshbyBettorAccountId()}
             title="Refresh BettorAccountID"
             color="#841584"
             accessibilityLabel="Learn more about this purple button"

@@ -1,5 +1,8 @@
+//import fetch from 'node-fetch';
+//import { HeadersInit, BodyInit, RequestInit } from 'node-fetch';
+
 //starts authenticated session
-export const fdSession = async(cookie: string | null | undefined, username: string, password: string, region: string, userAgent: string) => {
+export const fdSession = async(cookie: string, username: string, password: string, region: string, userAgent: string) => {
 
   const HEADERS = {
     "Authorization": "Basic ZWJlMzQ0ZTcwZWJmNzJhM2UzZjE4ZTNkZGM2OWM3ZDY6",
@@ -16,17 +19,19 @@ export const fdSession = async(cookie: string | null | undefined, username: stri
     "product":"SB"
   }
 
+  let body = JSON.stringify(form)
+
   const OPTS = {
     method: "POST",
     headers: HEADERS,
-    body: JSON.stringify(form)
+    body: body
   }
 
   return fetch("https://api.fanduel.com/sessions",OPTS)
 }
 
 //gets bets of a certain type
-const fdBetsType = async(authToken: string, settled: boolean,region: string, cookies: string | null | undefined, userAgent: string) => {
+const fdBetsType = async(authToken: string, settled: boolean,region: string, cookies: string, userAgent: string) => {
 
   const HEADERS = {
     Accept: "application/json",
@@ -43,13 +48,14 @@ const fdBetsType = async(authToken: string, settled: boolean,region: string, coo
 
   const urlBase = `https://sbapi.${region}.sportsbook.fanduel.com/api/my-bets?locale=en_US&sortDir=DESC&isSettled=${settled}&sortParam=SETTLEMENT_DATE&_ak=FhMFpcPWXMeyZxOx`;
 
-  var bets = [];
+  var bets = [] as any;
   var x = 1;
   while (x < 1000) {
     const url = urlBase.concat(`&fromRecord=${x}&toRecord=${x + 19}`);
     const result = await fetch(url, OPTS).catch((err) => console.error(`Error getting gets - ${err}`));
+    var data = {} as any;
     try {
-      var data = await result.json();
+      data = await result?.json();
     } catch {
       throw `Error when retrieving bet json - ${result?.status}`;
     }
@@ -68,7 +74,7 @@ const fdBetsType = async(authToken: string, settled: boolean,region: string, coo
 }
 
 //gets all bets up to 1000 max
-export const fdBets = async(authToken: string, region: string, cookies: string | null | undefined, userAgent: string) => {
+export const fdBets = async(authToken: string, region: string, cookies: string, userAgent: string) => {
   const SETTLED_BETS = await fdBetsType(authToken, true, region, cookies,userAgent);
   const OPEN_BETS = await fdBetsType(authToken, false, region,cookies,userAgent);
   console.log("NUMBER OF SETTLED BETS", SETTLED_BETS.length)

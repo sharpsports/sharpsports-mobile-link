@@ -1,12 +1,19 @@
 import React from 'react';
 import { LogBox } from 'react-native';
-import { NavigationContainer, NavigationContainerRef, RouteProp } from '@react-navigation/native';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src/SharpSports';
 
 import Main from './Main';
 import Details from './Details';
 import LoadingScreen from './LoadingScreen';
+
+//import SharpSports from '@sharpsports/sharpsports-mobile-link';
+import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src';
+
+const internalId = 'fd-refresh-tn'
+const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
+const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
+export const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)
 
 type RootStackParamList = {
   Main: undefined;
@@ -37,10 +44,9 @@ export type Props = {
 
 const StackNavigator = createStackNavigator<RootStackParamList>();
 
-
 const MainStack = () => {
   return (
-    <StackNavigator.Navigator mode="modal">
+    <StackNavigator.Navigator>
       <StackNavigator.Screen
         name="Main"
         component={Main}
