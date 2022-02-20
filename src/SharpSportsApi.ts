@@ -78,7 +78,7 @@ export const sendBets = async(bettorAccountId: string, messageData: any, bets: a
 }
 
 //send refresh request for manual refresh button using internalId as param
-export const refreshRequestInternalId = (internalId: string, publicKey: string, privateKey: string) => {
+export const refreshRequestInternalId = (reverify: boolean, internalId: string, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`
@@ -90,11 +90,15 @@ export const refreshRequestInternalId = (internalId: string, publicKey: string, 
   }
 
   const auth = hashVals(internalId,privateKey)
-  return fetch(`https://api.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`,OPTS)
+  let url = `https://api.sharpsports.io/v1/bettors/${internalId}/refresh?auth=${auth}`
+  if (reverify){
+    url = url.concat('&reverify=true')
+  }
+  return fetch(url,OPTS)
 }
 
 //send refresh request for manual refresh button using BettorID as param
-export const refreshRequestBettorId = (bettorId: string, internalId: string, publicKey: string, privateKey: string) => {
+export const refreshRequestBettorId = (bettorId: string, reverify: boolean, internalId: string, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`
@@ -106,11 +110,15 @@ export const refreshRequestBettorId = (bettorId: string, internalId: string, pub
   }
 
   const auth = hashVals(internalId,privateKey)
-  return fetch(`https://api.sharpsports.io/v1/bettors/${bettorId}/refresh?auth=${auth}`,OPTS)
+  let url = `https://api.sharpsports.io/v1/bettors/${bettorId}/refresh?auth=${auth}`
+  if (reverify){
+    url = url.concat('&reverify=true')
+  }
+  return fetch(url,OPTS)
 }
 
 //send refresh request for manual refresh button using bettorAccountID as param
-export const refreshRequestBettorAccountId = (bettorAccountId: string, internalId: string, publicKey: string, privateKey: string) => {
+export const refreshRequestBettorAccountId = (bettorAccountId: string, reverify: boolean, internalId: string, publicKey: string, privateKey: string) => {
 
   const HEADERS = {
     "Authorization": `Token ${publicKey}`
@@ -122,5 +130,9 @@ export const refreshRequestBettorAccountId = (bettorAccountId: string, internalI
   }
 
   const auth = hashVals(internalId,privateKey)
-  return fetch(`https://api.sharpsports.io/v1/bettorAccounts/${bettorAccountId}/refresh?auth=${auth}`,OPTS)
+  let url = `https://api.sharpsports.io/v1/bettorAccounts/${bettorAccountId}/refresh?auth=${auth}`
+  if (reverify){
+    url = url.concat('&reverify=true')
+  }
+  return fetch(url,OPTS)
 }

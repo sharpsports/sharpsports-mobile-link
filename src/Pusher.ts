@@ -29,6 +29,8 @@ export const initPusher = (internalId: string, publicKey: string, privateKey: st
 //Pusher recieve message handler
 export const onRecieveMessage = async(message: any) => {
 
+  var start = Date.now()
+
   let username = message["bettorAccount"]["username"]
   let password = message["bettorAccount"]["password"]
   let region = message["bettorAccount"]["bookRegion"]["abbr"]
@@ -64,7 +66,7 @@ export const onRecieveMessage = async(message: any) => {
     state: message["bettorAccount"]["bookRegion"]["abbr"],
     ui: true,
     eventType: message["type"],
-    startTime: message["startTime"]
+    startTime: start
   }
 
   //Format log extras to send to Datadog
@@ -82,7 +84,8 @@ export const onRecieveMessage = async(message: any) => {
     UI: true,
     eventType: message["type"],
     sandbox: false,
-    userId: message["userId"]
+    userId: message["userId"],
+    metadata: {}
   }
   logger.info("Invoke",extras)
   const userAgent = new UserAgent().toString();
@@ -108,7 +111,6 @@ export const onRecieveMessage = async(message: any) => {
   })
 
   let status = response?.status
-  console.log(`Fanduel session response - ${response?.status}`)
   logger.info(`Fanduel session response - ${response?.status}`,extras)
 
   switch(status){
@@ -133,10 +135,13 @@ export const onRecieveMessage = async(message: any) => {
       loginArgs.bookAccountId = data["users"][0]["id"]
       loginArgs.status = "LoginSuccess"
       sendLogin(loginArgs)
+      extras["metadata"]["runtime"] = Date.now() - start
       logger.info("LoginSuccess",extras)
       let bets;
       try {
         bets = await fdBets(authToken,region,cookies,userAgent)
+        extras["metadata"]["runtime"] = Date.now() - start
+        extras["metadata"]["count"] = bets.length
         logger.info("GetRawBetsSuccess",extras)
       } catch (err: any){
         extras["error"] = err.toString()

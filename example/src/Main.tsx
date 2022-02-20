@@ -1,7 +1,15 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, Button, Alert } from 'react-native';
-import { Props, sharpsports }  from './App';
+import { Props }  from './App';
 import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
+
+import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src';
+//import SharpSports from '@sharpsports/sharpsports-mobile-link';
+
+const internalId = 'fd-test-prod'
+const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
+const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
+export const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)
 
 export default function Main ({ navigation }: Props) {
 
@@ -30,11 +38,11 @@ export default function Main ({ navigation }: Props) {
     }
 
     const refreshbyBettorId = () => {
-        sharpsports.Refresh({bettorId: 'BTTR_ec4f0aec303a4984a297b412a6929088'})
+        sharpsports.Refresh({bettorId: 'BTTR_72cab09591ad4052ac881a608a368713'})
     }
 
     const refreshbyBettorAccountId = () => {
-        sharpsports.Refresh({bettorAccountId: 'BACT_5063a4b8d86940cb8a29be05f2781202'})
+        sharpsports.Refresh({bettorAccountId: 'BACT_2e7f6f5e54bd4fed88452bd41301f2ba', reverify: true})
     }
 
     return (

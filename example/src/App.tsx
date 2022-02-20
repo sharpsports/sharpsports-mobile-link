@@ -7,13 +7,6 @@ import Main from './Main';
 import Details from './Details';
 import LoadingScreen from './LoadingScreen';
 
-import SharpSports from '@sharpsports/sharpsports-mobile-link';
-
-const internalId = 'fd-refresh-tn'
-const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
-const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
-export const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)
-
 type RootStackParamList = {
   Main: undefined;
   Details: { webView: JSX.Element },

@@ -70,10 +70,15 @@ onError?: () =>  void;
 
 ### Arguments
 By default the `Refresh` method will run a refresh on all accounts associated with the `internalId` that you provided when initializing the `SharpSports` object. Optionally you can pass a `bettorId` to refresh all accounts associated with that ID or a `bettorAccountId` to refresh just a specific account.
+
+You can also optionally pass `reverify: true` as an argument to attach the reverify query parameter to the refresh request.
+
 ```
 bettorId?: string;
-bettorAccountId?: number;
+bettorAccountId?: string;
+reverify?: boolean;
 ```
+
 ### Usage
 #### Refresh by InternalID
 
@@ -104,6 +109,16 @@ corresponds to the API call
 POST https://api.sharpsports.io/v1/bettorAccounts/<BACT_ID>/refresh
 ```
 
+#### Reverify
+
+```
+sharpsports.Refresh({bettorAccountId: <BACT_ID>, reverify: true})
+```
+corresponds to the API call
+```
+POST https://api.sharpsports.io/v1/bettorAccounts/<BACT_ID>/refresh?reverify=true
+```
+
 # Example Implementation
   
 App.tsx
@@ -112,16 +127,9 @@ App.tsx
 import  React  from  'react';
 import { NavigationContainer, NavigationContainerRef, RouteProp } from  '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from  '@react-navigation/stack';
-import SharpSports from '@sharpsports/sharpsports-mobile-link';
 
 import  Main  from  './Main'; // The page containing the SharpSportsMobileLink
 import  Details  from  './Details'; // A page accepting an arbitrary WebView
-
-//init sharpsports
-const internalId = 'my-internal-id'
-const publicKey = 'my-public-key-string'
-const privateKey = 'my-private-key-string'
-export const sharpsports = new SharpSports(internalId,publicKey,privateKey)
 
 type  RootStackParamList = {
 	Main: undefined;
@@ -174,7 +182,15 @@ Main.tsx
 ```js
 import  React  from  'react';
 import { StyleSheet, SafeAreaView, Button, Alert, useNavigation } from  'react-native';
-import { Props, sharpsports } from  './App';
+import { Props } from  './App';
+
+import SharpSports from '@sharpsports/sharpsports-mobile-link';
+
+//init sharpsports
+const internalId = 'my-internal-id'
+const publicKey = 'my-public-key-string'
+const privateKey = 'my-private-key-string'
+export const sharpsports = new SharpSports(internalId,publicKey,privateKey)
 
 export  default  function  Main ({ navigation }: Props) {
 

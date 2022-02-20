@@ -77,7 +77,5 @@ const fdBetsType = async(authToken: string, settled: boolean,region: string, coo
 export const fdBets = async(authToken: string, region: string, cookies: string, userAgent: string) => {
   const SETTLED_BETS = await fdBetsType(authToken, true, region, cookies,userAgent);
   const OPEN_BETS = await fdBetsType(authToken, false, region,cookies,userAgent);
-  console.log("NUMBER OF SETTLED BETS", SETTLED_BETS.length)
-  console.log("NUMBER OF OPEN BETS", OPEN_BETS.length)
   return OPEN_BETS.concat(SETTLED_BETS);
 }

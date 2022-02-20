@@ -32,7 +32,7 @@ export default class DataDogJsonLogger {
 
     //set datadog specific logs
     jsonLog["ddsource"] = "native-app",
-    jsonLog["ddtags"] = "env:stg" //TODO make env variable
+    jsonLog["ddtags"] = "env:prod"
     jsonLog["service"] = "sharpsports-mobile-react-native"
 
     return jsonLog

@@ -9,7 +9,8 @@ const logger = new DataDogJsonLogger
 
 export interface RefreshArgs {
   bettorId?: string,
-  bettorAccountId?: string
+  bettorAccountId?: string,
+  reverify?: boolean
 }
 
 export interface ButtonArgs {
@@ -63,8 +64,6 @@ class SharpSports {
       channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials through account management wigit
       postContext(`https://api.sharpsports.io/v1/context`, this.internalId, this.publicKey, this.privateKey)
       .then(data => {
-          console.log("FETCHED INTEGRATION")
-          //const webView = PusherWebView(props,data.cid)
           args.onLoadingDismiss?.();
           args.presentWebView(
               <WebView
@@ -117,6 +116,11 @@ class SharpSports {
       this.isPusherInit = true;
     }
 
+    var reverify = false as boolean;
+    if (args?.reverify){
+      reverify = true;
+    }
+
     const channel = this.pusher?.subscribe(`private-${this.publicKey}-${this.internalId}`); //subscribe to channel if not already
     channel?.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
     channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials
@@ -124,11 +128,11 @@ class SharpSports {
     if (args?.bettorId && args?.bettorAccountId){
       throw 'You cannot input both a bettorId and a bettorAccountId'
     } else if (args?.bettorId){
-      return refreshRequestBettorId(args.bettorId, this.internalId, this.publicKey, this.privateKey)
+      return refreshRequestBettorId(args.bettorId, reverify, this.internalId, this.publicKey, this.privateKey)
     } else if (args?.bettorAccountId){
-      return refreshRequestBettorAccountId(args.bettorAccountId, this.internalId, this.publicKey, this.privateKey)
+      return refreshRequestBettorAccountId(args.bettorAccountId, reverify, this.internalId, this.publicKey, this.privateKey)
     } else {
-      return refreshRequestInternalId(this.internalId, this.publicKey, this.privateKey)
+      return refreshRequestInternalId(reverify, this.internalId, this.publicKey, this.privateKey)
     }
   }
 }
