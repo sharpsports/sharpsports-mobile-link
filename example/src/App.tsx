@@ -1,12 +1,11 @@
 import React from 'react';
 import { LogBox } from 'react-native';
-import { NavigationContainer, NavigationContainerRef, RouteProp } from '@react-navigation/native';
+import { NavigationContainer, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 
 import Main from './Main';
 import Details from './Details';
 import LoadingScreen from './LoadingScreen';
-
 
 type RootStackParamList = {
   Main: undefined;
@@ -39,7 +38,7 @@ const StackNavigator = createStackNavigator<RootStackParamList>();
 
 const MainStack = () => {
   return (
-    <StackNavigator.Navigator mode="modal">
+    <StackNavigator.Navigator>
       <StackNavigator.Screen
         name="Main"
         component={Main}

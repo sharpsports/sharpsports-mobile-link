@@ -1,6 +1,6 @@
 {
   "name": "@sharpsports/sharpsports-mobile-link",
-  "version": "1.0.1",
+  "version": "2.0.2",
   "description": "",
   "homepage": "https://github.com/sgoodbets/sharpsports-mobile-link.git",
   "main": "lib/index.js",
@@ -23,12 +23,13 @@
     "@types/jest": "^26.0.14",
     "@types/react-native": "^0.63.18",
     "@types/react-test-renderer": "^16.9.3",
+    "@types/user-agents": "^1.0.2",
     "babel-jest": "^26.3.0",
     "eslint": "^7.9.0",
     "eslint-plugin-simple-import-sort": "^5.0.3",
     "jest": "^26.4.2",
     "metro-react-native-babel-preset": "^0.63.0",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-native": "^0.63.2",
     "react-test-renderer": "^16.13.1",
     "typescript": "^4.0.2"
@@ -50,12 +51,16 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/netinfo": "^8.0.0",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
+    "md5": "^2.3.0",
+    "pusher-js": "^7.0.6",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
-    "react-native-webview": "^10.9.0"
+    "react-native-webview": "^10.9.0",
+    "user-agents": "^1.0.932"
   }
 }

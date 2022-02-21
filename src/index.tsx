@@ -1,4 +1,4 @@
 
-import SharpSportsMobileLink from './SharpSportsMobileLink';
+import SharpSports from './SharpSports';
 
-export default SharpSportsMobileLink;
+export default SharpSports;

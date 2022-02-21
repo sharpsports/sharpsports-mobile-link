@@ -1,13 +1,12 @@
 
 import * as React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { WebView, WebViewNavigation } from 'react-native-webview';
 
 export interface Props {
     internalId: string;
-    token: string;
     buttonText: string;
-    logoUrl: string;
+    publicKey: string;
+    privateKey: string;
     paddingVertical: number;
     paddingHorizontal: number;
     backgroundColor: string;
@@ -16,14 +15,11 @@ export interface Props {
     fontFamily: string;
     fontSize: number;
     textAlign: 'center' | 'left' | 'right | justify'
-    onLoading?: () => void;
-    onLoadingDismiss?: () => void;
-    onError?: () => void;
-    presentWebView: (webView: JSX.Element) => void;
-    dismissWebView: () => void;
+    fetchIntegration: () => void;
 }
 
 class SharpSportsMobileLink extends React.Component<Props> {
+    
     render() {
         const {
             backgroundColor,
@@ -51,7 +47,7 @@ class SharpSportsMobileLink extends React.Component<Props> {
         }
 
         return (
-            <TouchableOpacity onPress={() => fetchIntegration(this.props)} style={{justifyContent: "center" }}>
+            <TouchableOpacity onPress={() => this.props.fetchIntegration()} style={{justifyContent: "center" }}>
                 <View style={{ ...buttonStyle }}>
                     <Text style={{ ...buttonTextStyle }}>
                         { this.props.buttonText }
@@ -62,49 +58,5 @@ class SharpSportsMobileLink extends React.Component<Props> {
     }
 }
 
-const buildURL = (data: any, logoUrl: string) => {
-    return logoUrl ? `https://ui.sharpsports.io/link/${data.cid}?user_logo=${logoUrl}` : `https://ui.sharpsports.io/link/${data.cid}`;
-}
-
-const fetchIntegration = (props: Props) => {
-    const { internalId, token, logoUrl } = props;
-    props.onLoading?.();
-    postContext('https://api.sharpsports.io/v1/context', {internalId: internalId}, token)
-    .then(data => {
-        props.onLoadingDismiss?.();
-        props.presentWebView(
-            <WebView
-              source={{uri: buildURL(data, logoUrl)}}
-              style={{justifyContent: "center"}}
-              onNavigationStateChange={ (newNavState: WebViewNavigation) =>
-                  handleWebViewNavigationStateChange(props, newNavState)
-              }
-            />
-        )
-    })
-    .catch(error => {
-        console.log(`Error occurred: ${error}`)
-        props.onError?.()
-    })
-}
-
-const postContext = async(url: string, data = {}, token: string) => {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Token ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    return response.json();
-}
-
-const handleWebViewNavigationStateChange = (props: Props, newNavState: WebViewNavigation) => {
-    const { url } = newNavState;
-    if (url.includes('/done')) {
-        props.dismissWebView();
-    }
-}
-
 export default SharpSportsMobileLink;
+
