@@ -9,17 +9,20 @@ yarn
 for iOS:
 
 ```bash
+cd ios
 npx pod-install
 ```
 
 To run the app use:
 
 ```bash
-yarn ios
+npm ios
 ```
 
 or
 
 ```bash
-yarn android
+npm android
 ```
+
+or run workspace in XCode
