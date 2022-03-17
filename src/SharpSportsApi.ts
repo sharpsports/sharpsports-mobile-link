@@ -60,7 +60,8 @@ export const sendBets = async(bettorAccountId: string, messageData: any, bets: a
 
   const PAYLOAD = {
     bets: bets,
-    messageData: messageData
+    messageData: messageData,
+    requestId: messageData["requestId"]
   }
 
   const OPTS = {

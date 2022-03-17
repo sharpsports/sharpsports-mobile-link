@@ -1,6 +1,6 @@
 {
   "name": "@sharpsports/sharpsports-mobile-link",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "",
   "homepage": "https://github.com/sgoodbets/sharpsports-mobile-link.git",
   "main": "lib/index.js",
