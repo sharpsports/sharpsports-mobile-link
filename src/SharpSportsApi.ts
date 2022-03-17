@@ -34,7 +34,8 @@ export const sendLogin = (args: any) => {
     eventType: args.eventType,
     balance: args.balance,
     action: args.actions,
-    bookAccountId: args.bookAccountId
+    bookAccountId: args.bookAccountId,
+    requestId: args.requestId
   };
     
   //send Login requests to appropriate bettorAccount
