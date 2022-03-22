@@ -30,6 +30,28 @@ export const fdSession = async(cookie: string, username: string, password: strin
   return fetch("https://api.fanduel.com/sessions",OPTS)
 }
 
+export const fdWallet = async(authToken: string, region: string, cookies: string, userAgent: string) => {
+
+  const HEADERS = {
+    Accept: "application/json",
+    Referer: `https://${region}.sportsbook.fanduel.com/`,
+    "User-Agent": userAgent,
+    "X-Auth-Token": authToken,
+    "Authorization": "Basic ZWJlMzQ0ZTcwZWJmNzJhM2UzZjE4ZTNkZGM2OWM3ZDY6",
+    "X-Brand":"Fanduel",
+    "X-Currency": "USD",
+    cookie: cookies
+  };
+
+  const OPTS = {
+    method: "GET",
+    headers: HEADERS
+  }
+
+  return fetch("https://api.fanduel.com/account/wallet",OPTS)
+  
+}
+
 //gets bets of a certain type
 const fdBetsType = async(authToken: string, settled: boolean,region: string, cookies: string, userAgent: string) => {
 

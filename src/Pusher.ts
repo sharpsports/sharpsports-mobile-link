@@ -1,7 +1,7 @@
 import Pusher from 'pusher-js/react-native'
 import { hashVals } from './helpers';
 import { sendLogin, sendBets } from './SharpSportsApi';
-import { fdSession, fdBets } from './FanduelApi';
+import { fdSession, fdBets, fdWallet } from './FanduelApi';
 import DataDogJsonLogger from './datadog';
 import UserAgent from 'user-agents';
 const logger = new DataDogJsonLogger
@@ -130,9 +130,29 @@ export const onRecieveMessage = async(message: any) => {
         logger.error('LoginError',extras)    
       }
 
+
       let authToken = data["sessions"][0]["id"]
-      loginArgs.balance = data["users"][0]["balance"] * 100
       loginArgs.bookAccountId = data["users"][0]["id"]
+
+      //Retrieve playable sportsbook balance
+      let walletData;
+      let walletResponse = await fdWallet(authToken,region,cookies,userAgent)
+      loginArgs.balance = null;
+      if (walletResponse.status != 200){
+        extras["walletResponse"] = JSON.stringify(walletResponse)
+        logger.error('Error Getting Balance',extras)
+      } else {
+        try{
+          walletData = await walletResponse.json()
+          const balances = walletData.wallet_balances 
+          loginArgs.balance = balances.find((x: any) => x.account_type === "SPORTSBOOK_PLAYABLE").balance * 100
+        } catch (err: any){
+          extras["error"] = err.toString()
+          extras["walletResponseStatus"] = walletResponse.status
+          logger.error('Error Getting Balance',extras) 
+        }
+      }
+
       loginArgs.status = "LoginSuccess"
       sendLogin(loginArgs)
       extras["metadata"]["runtime"] = Date.now() - start
