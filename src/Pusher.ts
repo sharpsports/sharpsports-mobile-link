@@ -116,9 +116,22 @@ export const onRecieveMessage = async(message: any) => {
   switch(status){
 
     case 401: //if 401 send unauthorized to SS API
-      loginArgs.status = "LoginBadPass"
-      sendLogin(loginArgs)
-      logger.warn("LoginBadPass",extras)
+      let loginData = await response?.json();
+
+      let loginSummary = null
+      if (loginData['errors']) loginSummary = loginData['errors'][0]['summary']
+      else if (loginData['error']) loginSummary = loginData['error']['summary']
+
+      if (loginSummary && loginSummary == 'Authentication code required') {
+        loginArgs.status = "LoginFail"
+        loginArgs.action = "2FA"
+        sendLogin(loginArgs)
+        logger.warn("LoginFail",extras)
+      } else {
+        loginArgs.status = "LoginBadPass"
+        sendLogin(loginArgs)
+        logger.warn("LoginBadPass",extras)
+      }
       return;
 
     case 201:
