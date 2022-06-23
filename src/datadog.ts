@@ -31,9 +31,9 @@ export default class DataDogJsonLogger {
     }
 
     //set datadog specific logs
-    jsonLog["ddsource"] = "native-app",
-    jsonLog["ddtags"] = "env:prod"
-    jsonLog["service"] = "sharpsports-mobile-react-native"
+    jsonLog["ddsource"] = `sharpsports-mobile-2.1.0`,
+    jsonLog["ddtags"] = `env:prod`
+    jsonLog["service"] = "sharpsports-mobile-link"
 
     return jsonLog
 	}

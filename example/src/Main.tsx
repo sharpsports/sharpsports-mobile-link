@@ -3,10 +3,10 @@ import { StyleSheet, SafeAreaView, Button, Alert } from 'react-native';
 import { Props }  from './App';
 import { openLoadingScreen, closeLoadingScreen } from './LoadingScreen';
 
-//import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src';
-import SharpSports from '@sharpsports/sharpsports-mobile-link';
+import SharpSports from '/Users/samuelcoolidge/Desktop/sports/sharpsports-mobile-link/src';
+//import SharpSports from '@sharpsports/sharpsports-mobile-link';
 
-const internalId = 'fd-test-prod'
+const internalId = 'fd-test-prod-0622'
 const SSpublicKey = 'a4e27d45042947e7967146c26973bbd4a4e27d45'
 const SSprivateKey = '433b0432d117a4c9ae338bd2e8467175d67af829'
 export const sharpsports = new SharpSports(internalId,SSpublicKey,SSprivateKey)

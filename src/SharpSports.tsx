@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Pusher from 'pusher-js/react-native'
-import {initPusher, onRecieveMessage} from "./Pusher"
+import {onRecieveMessage} from "./RecieveMessage"
 import { refreshRequestInternalId, refreshRequestBettorId, refreshRequestBettorAccountId, postContext} from './SharpSportsApi';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 import DataDogJsonLogger from './datadog';
+import { hashVals } from './helpers';
 import SharpSportsMobileLink from './SharpSportsMobileLink'
 const logger = new DataDogJsonLogger
 
@@ -36,6 +37,7 @@ class SharpSports {
   privateKey: string;
   pusher: Pusher | null;
   isPusherInit: boolean;
+  hash: string;
  
   constructor(internalId: string, publicKey: string, privateKey: string) {
 
@@ -44,6 +46,26 @@ class SharpSports {
     this.privateKey = privateKey;
     this.isPusherInit = false;
     this.pusher = null;
+    this.hash = hashVals(internalId,privateKey);
+  }
+
+  initPusher() {
+
+    console.log("INIT PUSHER")
+
+    this.pusher = new Pusher('e68a810e3cf33be9dd8d', { 
+      cluster: 'mt1',
+      authEndpoint: `https://api.sharpsports.io/v1/pusher/auth`,
+      auth: {
+        headers: {
+          "Authorization": `Token ${this.publicKey}`
+        },
+        params: {
+          bettorToken: this.hash,
+          internalId: this.internalId
+        }
+      }
+    }); 
   }
 
   LinkButton(args: ButtonArgs) {
@@ -54,11 +76,11 @@ class SharpSports {
       
       //only init pusher on fetching of integration
       if (!this.isPusherInit){
-        this.pusher = initPusher(this.internalId, this.publicKey, this.privateKey)
+        this.initPusher()
         this.isPusherInit = true;
       }
 
-      const channel = this.pusher?.subscribe(`private-${this.publicKey}-${this.internalId}`); //subscribe to channel if not already
+      const channel = this.pusher?.subscribe(`private-encrypted-${this.hash}`); //subscribe to channel if not already
       channel?.unbind();  // unbind all channel events to ensure no duplicate message handling
       channel?.bind('verify', onRecieveMessage) //set up handler for recieving of credentials bookLink UI
       channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials through account management wigit
@@ -67,7 +89,7 @@ class SharpSports {
           args.onLoadingDismiss?.();
           args.presentWebView(
               <WebView
-                  source={{uri: `https://ui.sharpsports.io/link/${data.cid}`}}
+                  source={{uri: `https://ui.sharpsports.io/link/${data?.cid}`}}
                   style={{justifyContent: "center"}}
                   onNavigationStateChange={ (newNavState: WebViewNavigation) =>
                       handleWebViewNavigationStateChange(args.dismissWebView,newNavState)
@@ -112,7 +134,7 @@ class SharpSports {
 
     //only init pusher if it hasn't alrady been initialized
     if (!this.isPusherInit){
-      this.pusher = initPusher(this.internalId, this.publicKey, this.privateKey)
+      this.initPusher()
       this.isPusherInit = true;
     }
 
@@ -121,7 +143,7 @@ class SharpSports {
       reverify = true;
     }
 
-    const channel = this.pusher?.subscribe(`private-${this.publicKey}-${this.internalId}`); //subscribe to channel if not already
+    const channel = this.pusher?.subscribe(`private-encrypted-${this.hash}`); //subscribe to channel if not already
     channel?.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
     channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials
 

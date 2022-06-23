@@ -10,9 +10,9 @@
     "noUnusedParameters": true,
     "outDir": "./lib",
     "sourceMap": true,
-    "strict": true,
     "target": "ESNext",
-    "types":["react","jest"]
+    "types":["react","jest"],
+    "noImplicitAny": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/__tests__/*"]

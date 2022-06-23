@@ -12,7 +12,6 @@
       "sharpsports-mobile-link ": ["../src"]
     },
     "skipLibCheck": true,
-    "strict": true,
     "target": "ESNext"
   },
   "include": ["src"],
