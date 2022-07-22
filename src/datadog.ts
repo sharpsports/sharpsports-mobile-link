@@ -1,3 +1,5 @@
+import { version } from './version'
+
 export default class DataDogJsonLogger {
   constructor() {
   }
@@ -31,9 +33,9 @@ export default class DataDogJsonLogger {
     }
 
     //set datadog specific logs
-    jsonLog["ddsource"] = `sharpsports-mobile-2.1.0`,
+    jsonLog["ddsource"] = `sharpsports-mobile-${version}`,
     jsonLog["ddtags"] = `env:prod`
-    jsonLog["service"] = "sharpsports-mobile-link"
+    jsonLog["service"] = "sharpsports-mobile"
 
     return jsonLog
 	}

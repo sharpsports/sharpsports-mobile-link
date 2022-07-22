@@ -14,7 +14,7 @@
     "@react-native-community/netinfo": "^8.0.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
-    "@sharpsports/sharpsports-mobile-link": "^2.0.3",
+    "@sharpsports/sharpsports-mobile-link": "2.2.0",
     "react": "^16.13.1",
     "react-native": "^0.63.2",
     "react-native-gesture-handler": "^1.8.0",

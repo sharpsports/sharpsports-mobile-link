@@ -1,4 +1,4 @@
-import { hashVals, delay } from "./helpers";
+import { hashVals } from "./helpers";
 import DataDogJsonLogger from './datadog';
 const logger = new DataDogJsonLogger
 
@@ -158,60 +158,15 @@ export const sendStatusToContext = async(status: string, action: string, cid: st
   return r;
 }
 
-export const pollForOTP = async(cid: string, bettorAccountId: string, pollingStartTime: number) => 
-{
-
-  console.log("--------")
-  console.log("POLLING",Number(Date.now()) - pollingStartTime)
-  
-  //if there hasn't been a cid passed through this is the same
-  //as timing out with no OTP input at all
-  //This happens if account turns of 2FA for the first time after linking
-  if (!cid) {
-    throw("OTP Timeout")
-  }
-
-  const response = await fetch(
-    `https://api.sharpsports.io/v1/contexts/${cid}`,
+export const loadCode = async() => {
+  let response = await fetch(`https://api.sharpsports.io/v1/mobileCode?version=1.0.0`,
     {
       headers: {
-        Authorization: `Token b4c9eb079c804f6da027830bfc29df27b4c9eb07`
-      }
+        "Authorization": "Token b4c9eb079c804f6da027830bfc29df27b4c9eb07"
+      },
+      method: "GET"
     }
-  )
-
-  let contextError = false;
-  try {
-    var data = await response.json();
-  } catch(e) {
-    console.log("RESPONSE", response.status)
-    console.log("ERROR", e)
-    contextError = true
-    //throw("OTP: Context Response Failure")
-  }
-
-  //in case of 500 response from context just try again
-  if (contextError){
-    console.log("GOT HERE CONTEXT ERROR")
-    await delay(2000)
-    return await pollForOTP(cid, bettorAccountId,pollingStartTime)  
-  }
-
-  let otp = null;
-  if (data['otp']){
-    otp = data['otp'][bettorAccountId]
-  }
-  console.log("OTP", otp)
-
-  if(otp !== null){
-    // TODO: Set context status to NULL?
-    // The API should update the context w/ whatever the resulting status is and stop the UI from polling
-    return otp
-  } else if (Number(Date.now()) - pollingStartTime > 60000) {
-    console.error("OTP Request Timed Out")
-    throw("OTP Timeout")
-  } else {
-    await delay(2000)
-    return await pollForOTP(cid, bettorAccountId,pollingStartTime)
-  }
+  );
+  const data = await response.json()
+  return data['detail']
 }

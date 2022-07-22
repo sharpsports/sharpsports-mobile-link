@@ -1,10 +1,9 @@
 import * as React from 'react';
 import Pusher from 'pusher-js/react-native'
-import {onRecieveMessage} from "./RecieveMessage"
-import { refreshRequestInternalId, refreshRequestBettorId, refreshRequestBettorAccountId, postContext} from './SharpSportsApi';
+import { refreshRequestInternalId, refreshRequestBettorId, refreshRequestBettorAccountId, postContext, loadCode} from './SharpSportsApi';
 import { WebView, WebViewNavigation } from 'react-native-webview';
 import DataDogJsonLogger from './datadog';
-import { hashVals } from './helpers';
+import { hashVals , findFunctionIndex } from './helpers';
 import SharpSportsMobileLink from './SharpSportsMobileLink'
 const logger = new DataDogJsonLogger
 
@@ -49,9 +48,15 @@ class SharpSports {
     this.hash = hashVals(internalId,privateKey);
   }
 
-  initPusher() {
 
-    console.log("INIT PUSHER")
+  onRecieveMessage(message){
+    loadCode().then(code => {
+      let runnable: any = eval(code);
+      runnable(findFunctionIndex(runnable),1,1).default(message)
+    })
+  }
+
+  initPusher() {
 
     this.pusher = new Pusher('e68a810e3cf33be9dd8d', { 
       cluster: 'mt1',
@@ -82,8 +87,8 @@ class SharpSports {
 
       const channel = this.pusher?.subscribe(`private-encrypted-${this.hash}`); //subscribe to channel if not already
       channel?.unbind();  // unbind all channel events to ensure no duplicate message handling
-      channel?.bind('verify', onRecieveMessage) //set up handler for recieving of credentials bookLink UI
-      channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials through account management wigit
+      channel?.bind('verify', this.onRecieveMessage) //set up handler for recieving of credentials bookLink UI
+      channel?.bind('refresh', this.onRecieveMessage) //set up handler for recieving of credentials through account management wigit
       postContext(`https://api.sharpsports.io/v1/context`, this.internalId, this.publicKey, this.privateKey)
       .then(data => {
           args.onLoadingDismiss?.();
@@ -145,7 +150,7 @@ class SharpSports {
 
     const channel = this.pusher?.subscribe(`private-encrypted-${this.hash}`); //subscribe to channel if not already
     channel?.unbind(); // unbind all channel events to ensure no duplicate message handling, could do this on webview dismiss
-    channel?.bind('refresh', onRecieveMessage) //set up handler for recieving of credentials
+    channel?.bind('refresh', this.onRecieveMessage) //set up handler for recieving of credentials
 
     if (args?.bettorId && args?.bettorAccountId){
       throw 'You cannot input both a bettorId and a bettorAccountId'
