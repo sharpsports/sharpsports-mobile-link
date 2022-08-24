@@ -33,9 +33,9 @@ export default class DataDogJsonLogger {
     }
 
     //set datadog specific logs
-    jsonLog["ddsource"] = `sharpsports-mobile-${version}`,
+    jsonLog["ddsource"] = `sharpsports-mobile-rn_${version}`,
     jsonLog["ddtags"] = `env:prod`
-    jsonLog["service"] = "sharpsports-mobile"
+    jsonLog["service"] = "sharpsports-mobile-rn"
 
     return jsonLog
 	}
