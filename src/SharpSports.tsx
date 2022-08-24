@@ -57,7 +57,8 @@ class SharpSports {
   }
 
   initPusher() {
-
+    
+    logger.info("Pusher Initialized",{internalId:this.internalId});
     this.pusher = new Pusher('e68a810e3cf33be9dd8d', { 
       cluster: 'mt1',
       authEndpoint: `https://api.sharpsports.io/v1/pusher/auth`,
