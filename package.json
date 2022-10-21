@@ -57,7 +57,7 @@
     "md5": "^2.3.0",
     "pusher-js": "^7.0.6",
     "react-native-gesture-handler": "^1.8.0",
-    "react-native-reanimated": "^1.13.0",
+    "react-native-reanimated": "^2.10.0",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
     "react-native-webview": "^10.9.0",
